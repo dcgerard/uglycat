@@ -1,0 +1,11 @@
+Package: uglycat
+Title: Using Genotype Likelihoods Yields Correlations and T-statistics
+Version: 0.0.0.9000
+Date: 2018-07-23
+Authors@R: person("David", "Gerard", email = "gerard.1787@gmail.com", role = c("aut", "cre"), comment = c(ORCID = "0000-0001-9450-5023"))
+Description: Uses genotype likelihoods to estimate the correlation between SNPs,
+    then applies shrinkage to come up with estimates of linkage disequilibrium.
+Depends: R (>= 3.5.0)
+License: GPL-3
+Encoding: UTF-8
+LazyData: true
