@@ -71,6 +71,15 @@ test_that("bvnl works", {
     Rmat <- matrix(c(1, rho, rho, 1), ncol = 2, nrow = 2)
     mvval <- mvtnorm::pmvnorm(upper = c(2, 2), corr = Rmat)[[1]]
     uval <- bvnl(dh = 2, dk = 2, r = rho)
+    cat(bvnl(dh = 2, dk = 2, r = 0.800), "\n")
+    cat(bvnl(dh = 2, dk = 2, r = 0.900), "\n")
+    cat(bvnl(dh = 2, dk = 2, r = 0.924), "\n")
+    cat(bvnl(dh = 2, dk = 2, r = 0.926), "\n")
+    cat(bvnl(dh = 2, dk = 2, r = 0.950), "\n")
+    cat(bvnl(dh = 2, dk = 2, r = 0.960), "\n")
+    cat(bvnl(dh = 2, dk = 2, r = 0.970), "\n")
+    cat(bvnl(dh = 2, dk = 2, r = 0.980), "\n")
+    cat(bvnl(dh = 2, dk = 2, r = 0.990), "\n")
     expect_equal(mvval, uval)
 
     rho <- -0.99

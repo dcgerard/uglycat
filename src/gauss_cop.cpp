@@ -74,7 +74,7 @@ extern double TOL; // defined in correst_c.cpp
 // [[Rcpp::export]]
 double bvnu(double dh, double dk, double r) {
   double p;
-  if (dh == R_PosInf | dk == R_PosInf) {
+  if ((dh == R_PosInf) | (dk == R_PosInf)) {
     p = 0;
   } else if (dh == R_NegInf) {
     if (dk == R_NegInf) {
