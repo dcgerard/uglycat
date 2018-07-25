@@ -197,71 +197,73 @@ double bvnu(double dh, double dk, double r) {
         wsub = w[ix];
         bvn = (a * Rcpp::sum(edave * wsub) - bvn) / tp;
 
-        Rcpp::Rcout
-          << "x: "
-          << x
-          << std::endl
-          << "w: "
-          << w
-          << std::endl
-          << "hk: "
-          << hk
-          << std::endl
-          << "h: "
-          << h
-          << std::endl
-          << "k: "
-          << k
-          << std::endl
-          << "edave: "
-          << edave
-          << std::endl
-          << "wsub: "
-          << wsub
-          << std::endl
-          << "rs: "
-          << rs
-          << std::endl
-          << "ep: "
-          << ep
-          << std::endl
-          << "asr_vec: "
-          << asr_vec
-          << std::endl
-          << "sp_vec: "
-          << sp_vec
-          << std::endl
-          << "xs: "
-          << xs
-          << std::endl
-          << "xsub: "
-          << xsub
-          << std::endl
-          << "ix: "
-          << ix
-          << std::endl
-          << "as: "
-          << as
-          << std::endl
-          << "a: "
-          << a
-          << std::endl
-          << "bs: "
-          << bs
-          << std::endl
-          << "b: "
-          << b
-          << std::endl
-          << "c: "
-          << c
-          << std::endl
-          << "d: "
-          << d
-          << std::endl
-          << "sp: "
-          << sp
-          << std::endl
-          << std::endl;
+        // Rcpp::Rcout
+        //   << "x: "
+        //   << x
+        //   << std::endl
+        //   << "w: "
+        //   << w
+        //   << std::endl
+        //   << "hk: "
+        //   << hk
+        //   << std::endl
+        //   << "h: "
+        //   << h
+        //   << std::endl
+        //   << "k: "
+        //   << k
+        //   << std::endl
+        //   << "edave: "
+        //   << edave
+        //   << std::endl
+        //   << "wsub: "
+        //   << wsub
+        //   << std::endl
+        //   << "rs: "
+        //   << rs
+        //   << std::endl
+        //   << "ep: "
+        //   << ep
+        //   << std::endl
+        //   << "asr_vec: "
+        //   << asr_vec
+        //   << std::endl
+        //   << "sp_vec: "
+        //   << sp_vec
+        //   << std::endl
+        //   << "xs: "
+        //   << xs
+        //   << std::endl
+        //   << "xsub: "
+        //   << xsub
+        //   << std::endl
+        //   << "ix: "
+        //   << ix
+        //   << std::endl
+        //   << "as: "
+        //   << as
+        //   << std::endl
+        //   << "a: "
+        //   << a
+        //   << std::endl
+        //   << "bs: "
+        //   << bs
+        //   << std::endl
+        //   << "b: "
+        //   << b
+        //   << std::endl
+        //   << "c: "
+        //   << c
+        //   << std::endl
+        //   << "d: "
+        //   << d
+        //   << std::endl
+        //   << "sp: "
+        //   << sp
+        //   << std::endl
+        //   << std::endl;
+
+        Rcpp::Rcout << "bvn: " << bvn << std::endl;
       }
       if (r > 0.0) {
         bvn =  bvn + R::pnorm5(-std::max(h, k), 0.0, 1.0, 1, 0);
