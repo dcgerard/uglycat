@@ -139,15 +139,9 @@ double bvnu(double dh, double dk, double r) {
       bvn = Rcpp::sum(Rcpp::exp((sn * hk - hs) / (1 - Rcpp::pow(sn, 2.0))) * w);
       bvn = bvn * asr / tp + R::pnorm5(-h, 0.0, 1.0, 1, 0) * R::pnorm5(-k, 0.0, 1.0, 1, 0);
     } else {
-      NumericVector edave;
-      NumericVector wsub;
-      NumericVector rs;
-      NumericVector ep;
-      NumericVector asr_vec;
-      NumericVector sp_vec;
-      NumericVector xs;
-      NumericVector xsub;
-      LogicalVector ix;
+      NumericVector asr_vec(x.length());
+      NumericVector xs(x.length());
+      LogicalVector ix(x.length());
       double as;
       double a;
       double bs;
@@ -175,9 +169,26 @@ double bvnu(double dh, double dk, double r) {
           bvn = bvn - std::exp(-hk / 2) * sp * b * (1.0 - c * bs * (1.0 - d * bs) / 3);
         }
         a = a / 2.0;
-        xs = Rcpp::pow(a * x, 2.0);
+        for (int i = 0; i < x.length(); i++) {
+          xs(i) = std::pow(a * x(i), 2.0);
+        }
         asr_vec = -(bs / xs + hk) / 2.0;
         ix =  asr_vec > -100.0;
+
+        int num_g100 = 0;
+        for (int i = 0; i < ix.length(); i++) {
+          if (ix(i)) {
+            num_g100++;
+          }
+        }
+
+
+        NumericVector xsub(num_g100);
+        NumericVector sp_vec(num_g100);
+        NumericVector rs(num_g100);
+        NumericVector ep(num_g100);
+        NumericVector wsub(num_g100);
+        NumericVector edave(num_g100);
         xsub = xs[ix];
         sp_vec = (1.0 + c * xsub * (1.0 + 5.0 * d * xsub));
         rs = Rcpp::sqrt(1.0 - xsub);
