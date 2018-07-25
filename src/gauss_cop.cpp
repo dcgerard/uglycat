@@ -73,12 +73,12 @@ extern double TOL; // defined in utils.cpp
 //' @author David Gerard
 // [[Rcpp::export]]
 double bvnu(double dh, double dk, double r) {
-  double p;
+  double p = 0.0;
   if ((dh == R_PosInf) | (dk == R_PosInf)) {
-    p = 0;
+    p = 0.0;
   } else if (dh == R_NegInf) {
     if (dk == R_NegInf) {
-      p = 1;
+      p = 1.0;
     } else {
       R::pnorm5(-dk, 0.0, 1.0, 1, 0);
     }
@@ -174,7 +174,6 @@ double bvnu(double dh, double dk, double r) {
         }
         asr_vec = -(bs / xs + hk) / 2.0;
         ix =  asr_vec > -100.0;
-
         int num_g100 = 0;
         for (int i = 0; i < ix.length(); i++) {
           if (ix(i)) {
@@ -189,12 +188,37 @@ double bvnu(double dh, double dk, double r) {
         NumericVector ep(num_g100);
         NumericVector wsub(num_g100);
         NumericVector edave(num_g100);
-        xsub = xs[ix];
+        NumericVector asr_vec_sub(num_g100);
+
+        // Ran into segfaults on windows if used vectorized indexing.
+        int j = 0;
+        for (int i = 0; i < xs.length(); i++) {
+          if (ix(i)) {
+            xsub(j) = xs(i);
+            j++;
+          }
+        }
+
+        j = 0;
+        for (int i = 0; i < asr_vec.length(); i++) {
+          if (ix(i)) {
+            asr_vec_sub(j) = asr_vec(i);
+            j++;
+          }
+        }
+
+        j = 0;
+        for (int i = 0; i < w.length(); i++) {
+          if (ix(i)) {
+            wsub(j) = w(i);
+            j++;
+          }
+        }
+
         sp_vec = (1.0 + c * xsub * (1.0 + 5.0 * d * xsub));
         rs = Rcpp::sqrt(1.0 - xsub);
         ep = Rcpp::exp(-(hk / 2.0) * xsub / Rcpp::pow(1.0 + rs, 2.0)) / rs;
-        edave = Rcpp::exp(asr_vec[ix]) * (sp_vec - ep);
-        wsub = w[ix];
+        edave = Rcpp::exp(asr_vec_sub) * (sp_vec - ep);
         bvn = (a * Rcpp::sum(edave * wsub) - bvn) / tp;
 
         // Rcpp::Rcout
@@ -262,8 +286,7 @@ double bvnu(double dh, double dk, double r) {
         //   << sp
         //   << std::endl
         //   << std::endl;
-
-        Rcpp::Rcout << "bvn: " << bvn << std::endl;
+        // Rcpp::Rcout << "bvn: " << bvn << std::endl;
       }
       if (r > 0.0) {
         bvn =  bvn + R::pnorm5(-std::max(h, k), 0.0, 1.0, 1, 0);
