@@ -25,6 +25,15 @@ of dosage \code{j - 1} for SNP 2.}
 \item{is_log}{A logical. Are \code{X}, \code{Y}, \code{g}, and \code{h} all on the
 log-scale (\code{TRUE}) or not (\code{FALSE}).}
 }
+\value{
+A list with the following elements:
+\describe{
+  \item{\code{zhat}}{The estimate of the atanh of the correlation of the SNPs on the
+      transformed scale}
+  \item{\code{se_zhat}}{The estimated standard error of zhat.}
+  \item{\code{corest}}{The estimated correlation of the SNPs on the original scale.}
+}
+}
 \description{
 Estimate the correlation between two SNPs from the genotype likelihoods and the
 genotype distribution.

@@ -6,6 +6,19 @@
 
 using namespace Rcpp;
 
+// dist_from_marg
+Rcpp::NumericMatrix dist_from_marg(Rcpp::NumericVector g_cdf, Rcpp::NumericVector h_cdf, double rho);
+RcppExport SEXP _uglycat_dist_from_marg(SEXP g_cdfSEXP, SEXP h_cdfSEXP, SEXP rhoSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type g_cdf(g_cdfSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type h_cdf(h_cdfSEXP);
+    Rcpp::traits::input_parameter< double >::type rho(rhoSEXP);
+    rcpp_result_gen = Rcpp::wrap(dist_from_marg(g_cdf, h_cdf, rho));
+    return rcpp_result_gen;
+END_RCPP
+}
 // corrlike
 double corrlike(double atanh_rho, const NumericMatrix& lX, const NumericMatrix& lY, const NumericVector& lg, const NumericVector& lh);
 RcppExport SEXP _uglycat_corrlike(SEXP atanh_rhoSEXP, SEXP lXSEXP, SEXP lYSEXP, SEXP lgSEXP, SEXP lhSEXP) {
@@ -89,6 +102,7 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
+    {"_uglycat_dist_from_marg", (DL_FUNC) &_uglycat_dist_from_marg, 3},
     {"_uglycat_corrlike", (DL_FUNC) &_uglycat_corrlike, 5},
     {"_uglycat_bvnu", (DL_FUNC) &_uglycat_bvnu, 3},
     {"_uglycat_bvnl", (DL_FUNC) &_uglycat_bvnl, 3},

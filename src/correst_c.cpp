@@ -12,52 +12,29 @@ double pnormcop(double x, double y, double rho); // From gauss_cop.cpp
 // Global variables -------------------------
 extern double TOL; // defined in utils.cpp
 
-//' Likelihood of the correlation given the count data.
+
+//' Get the probability mass function given marginal cdf's and the
+//' correlation.
 //'
-//' @param atanh_rho The inverse hyperbolic tangent of the correlation.
-//'     This is also known as the Fisher Z-transformation of the correlation.
-//' @param lX A matrix with the genotype log-likelihoods for the first SNP. Element
-//'     (\code{i}, \code{j}) is the log-likelihood
-//'     of the data for individual \code{i} given dosage \code{j} for SNP 1.
-//' @param lY A matrix with the genotype log-likelihoods for the second SNP. Element
-//'     (\code{i}, \code{j}) is the log-likelihood
-//'     of the data for individual \code{i} given dosage \code{j} for SNP 2.
-//' @param lg A vector with the log-probabilities of the genotypes for the first SNP. Element
-//'     \code{j} is the log-probability of dosage \code{j - 1} in SNP 1.
-//' @param lh A vector with the log-probabilities of the genotypes for the second SNP. Element
-//'     \code{j} is the log-probability of dosage \code{j - 1} in SNP 2.
+//' @param g_cdf The cdf of the first SNP.
+//' @param h_cdf The cdf of the second SNP.
+//' @param rho The correlation.
+//'
+//' @return A matrix. The rows index the first SNP and the columns index the second SNP.
+//'     Element (i, j) is the probability of genotype i - 1 in SNP 1 and j - 1 in SNP 2.
 //'
 //' @author David Gerard
-//'
-//' @seealso
-//' \describe{
-//'   \item{\code{\link{correst}}}{For the function that optimizes \code{corrlike_r}.}
-//' }
-//'
 // [[Rcpp::export]]
-double corrlike(double atanh_rho,
-                const NumericMatrix& lX,
-                const NumericMatrix& lY,
-                const NumericVector& lg,
-                const NumericVector& lh) {
-  // check input -------------------------------------------
-  int K = lg.length();
-  int n = lX.nrow();
-  if ((n != lX.nrow()) | (n != lY.nrow())) {
-    Rcpp::stop("corrlike: lX and lY should have the same number of rows.");
+Rcpp::NumericMatrix dist_from_marg(Rcpp::NumericVector g_cdf,
+                                   Rcpp::NumericVector h_cdf,
+                                   double rho) {
+  int K = g_cdf.length();
+  if (g_cdf.length() != h_cdf.length()) {
+    Rcpp::stop("dist_from_marg: g_cdf and h_cdf should have the same length.");
   }
-  if ((K != lX.ncol()) |
-      (K != lY.ncol()) |
-      (K != lg.length()) |
-      (K != lh.length())) {
-    Rcpp::stop("corrlike: lX.col(), lY.col(), lg.length(), and lh.lenght() should be equal.");
+  if ((rho < -1.0) | (rho > 1.0)) {
+    Rcpp::stop("dist_from_marg: rho should be between -1 and 1.");
   }
-
-  double rho = std::tanh(atanh_rho);
-
-  // Get cumulative density function ----------------------
-  NumericVector g_cdf = Rcpp::exp(log_cum_sum_exp(lg));
-  NumericVector h_cdf = Rcpp::exp(log_cum_sum_exp(lh));
 
   // Get cdf matrix ---------------------------------------
   Rcpp::NumericMatrix cdf_mat(K, K);
@@ -106,6 +83,59 @@ double corrlike(double atanh_rho,
       }
     }
   }
+  return prior_mat;
+}
+
+//' Likelihood of the correlation given the count data.
+//'
+//' @param atanh_rho The inverse hyperbolic tangent of the correlation.
+//'     This is also known as the Fisher Z-transformation of the correlation.
+//' @param lX A matrix with the genotype log-likelihoods for the first SNP. Element
+//'     (\code{i}, \code{j}) is the log-likelihood
+//'     of the data for individual \code{i} given dosage \code{j} for SNP 1.
+//' @param lY A matrix with the genotype log-likelihoods for the second SNP. Element
+//'     (\code{i}, \code{j}) is the log-likelihood
+//'     of the data for individual \code{i} given dosage \code{j} for SNP 2.
+//' @param lg A vector with the log-probabilities of the genotypes for the first SNP. Element
+//'     \code{j} is the log-probability of dosage \code{j - 1} in SNP 1.
+//' @param lh A vector with the log-probabilities of the genotypes for the second SNP. Element
+//'     \code{j} is the log-probability of dosage \code{j - 1} in SNP 2.
+//'
+//' @author David Gerard
+//'
+//' @seealso
+//' \describe{
+//'   \item{\code{\link{correst}}}{For the function that optimizes \code{corrlike_r}.}
+//' }
+//'
+// [[Rcpp::export]]
+double corrlike(double atanh_rho,
+                const NumericMatrix& lX,
+                const NumericMatrix& lY,
+                const NumericVector& lg,
+                const NumericVector& lh) {
+  // check input -------------------------------------------
+  int K = lg.length();
+  int n = lX.nrow();
+  if ((n != lX.nrow()) | (n != lY.nrow())) {
+    Rcpp::stop("corrlike: lX and lY should have the same number of rows.");
+  }
+  if ((K != lX.ncol()) |
+      (K != lY.ncol()) |
+      (K != lg.length()) |
+      (K != lh.length())) {
+    Rcpp::stop("corrlike: lX.col(), lY.col(), lg.length(), and lh.lenght() should be equal.");
+  }
+
+  double rho = std::tanh(atanh_rho);
+
+  // Get cumulative density function ----------------------
+  NumericVector g_cdf = Rcpp::exp(log_cum_sum_exp(lg));
+  NumericVector h_cdf = Rcpp::exp(log_cum_sum_exp(lh));
+
+  // Get prior probability
+  NumericMatrix prior_mat(K, K);
+  prior_mat = dist_from_marg(g_cdf, h_cdf, rho);
 
   // Get log-likelihood -----------------------------------
   double llike = 0.0;

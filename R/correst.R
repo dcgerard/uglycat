@@ -16,6 +16,14 @@
 #' @param is_log A logical. Are \code{X}, \code{Y}, \code{g}, and \code{h} all on the
 #'     log-scale (\code{TRUE}) or not (\code{FALSE}).
 #'
+#' @return A list with the following elements:
+#' \describe{
+#'   \item{\code{zhat}}{The estimate of the atanh of the correlation of the SNPs on the
+#'       transformed scale}
+#'   \item{\code{se_zhat}}{The estimated standard error of zhat.}
+#'   \item{\code{corest}}{The estimated correlation of the SNPs on the original scale.}
+#' }
+#'
 #' @author David Gerard
 #'
 #' @export
@@ -74,11 +82,19 @@ correst <- function(X, Y, g, h, is_log = FALSE) {
                        lg      = lg,
                        lh      = lh)
 
-  ## Get parameter estimate and se
+  ## Get parameter estimate and se -------------------------
   zhat <- oout$par
   se_zhat <- 1 / sqrt(max(-oout$hessian, 0))
 
-  return(list(zhat = zhat, se_zhat = se_zhat))
+  ## Get MLE of correlation of genotypes (not transformed genotypes)--------------------------------
+  jd <- exp(dist_from_marg(g_cdf = exp(log_cum_sum_exp(lg)),
+                           h_cdf = exp(log_cum_sum_exp(lh)),
+                           rho = tanh(zhat)))
+  sumjd <- sum(jd)
+  jd <- jd / sumjd
+  corest <- updog::oracle_cor_from_joint(jd)
+
+  return(list(zhat = zhat, se_zhat = se_zhat, corest = corest))
 }
 
 
