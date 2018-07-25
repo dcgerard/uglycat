@@ -76,29 +76,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// log_sum_exp
-double log_sum_exp(NumericVector x);
-RcppExport SEXP _uglycat_log_sum_exp(SEXP xSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
-    rcpp_result_gen = Rcpp::wrap(log_sum_exp(x));
-    return rcpp_result_gen;
-END_RCPP
-}
-// log_sum_exp_2
-double log_sum_exp_2(double x, double y);
-RcppExport SEXP _uglycat_log_sum_exp_2(SEXP xSEXP, SEXP ySEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< double >::type x(xSEXP);
-    Rcpp::traits::input_parameter< double >::type y(ySEXP);
-    rcpp_result_gen = Rcpp::wrap(log_sum_exp_2(x, y));
-    return rcpp_result_gen;
-END_RCPP
-}
 // log_cum_sum_exp
 NumericVector log_cum_sum_exp(NumericVector x);
 RcppExport SEXP _uglycat_log_cum_sum_exp(SEXP xSEXP) {
@@ -110,28 +87,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// logit
-double logit(double x);
-RcppExport SEXP _uglycat_logit(SEXP xSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< double >::type x(xSEXP);
-    rcpp_result_gen = Rcpp::wrap(logit(x));
-    return rcpp_result_gen;
-END_RCPP
-}
-// expit
-double expit(double x);
-RcppExport SEXP _uglycat_expit(SEXP xSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< double >::type x(xSEXP);
-    rcpp_result_gen = Rcpp::wrap(expit(x));
-    return rcpp_result_gen;
-END_RCPP
-}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_uglycat_corrlike", (DL_FUNC) &_uglycat_corrlike, 5},
@@ -139,11 +94,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_uglycat_bvnl", (DL_FUNC) &_uglycat_bvnl, 3},
     {"_uglycat_pnormcop", (DL_FUNC) &_uglycat_pnormcop, 3},
     {"_uglycat_gen_like", (DL_FUNC) &_uglycat_gen_like, 6},
-    {"_uglycat_log_sum_exp", (DL_FUNC) &_uglycat_log_sum_exp, 1},
-    {"_uglycat_log_sum_exp_2", (DL_FUNC) &_uglycat_log_sum_exp_2, 2},
     {"_uglycat_log_cum_sum_exp", (DL_FUNC) &_uglycat_log_cum_sum_exp, 1},
-    {"_uglycat_logit", (DL_FUNC) &_uglycat_logit, 1},
-    {"_uglycat_expit", (DL_FUNC) &_uglycat_expit, 1},
     {NULL, NULL, 0}
 };
 

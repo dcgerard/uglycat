@@ -105,31 +105,6 @@ gen_like <- function(refvec, sizevec, ploidy, seq, bias, od) {
     .Call('_uglycat_gen_like', PACKAGE = 'uglycat', refvec, sizevec, ploidy, seq, bias, od)
 }
 
-#' Log-sum-exponential trick.
-#'
-#' @param x A vector to log-sum-exp.
-#'
-#' @return The log of the sum of the exponential
-#'     of the elements in \code{x}.
-#'
-#' @author David Gerard
-log_sum_exp <- function(x) {
-    .Call('_uglycat_log_sum_exp', PACKAGE = 'uglycat', x)
-}
-
-#' Log-sum-exponential trick using just two doubles.
-#'
-#' @param x A double.
-#' @param y Another double.
-#'
-#' @return The log of the sum of the exponential of x and y.
-#'
-#' @author David Gerard
-#'
-log_sum_exp_2 <- function(x, y) {
-    .Call('_uglycat_log_sum_exp_2', PACKAGE = 'uglycat', x, y)
-}
-
 #' Log of cumulative sum of exponential.
 #'
 #' @param x A vector to log-cum-sum-exp.
@@ -140,27 +115,5 @@ log_sum_exp_2 <- function(x, y) {
 #' @author David Gerard
 log_cum_sum_exp <- function(x) {
     .Call('_uglycat_log_cum_sum_exp', PACKAGE = 'uglycat', x)
-}
-
-#' The logit function.
-#'
-#' @param x A double between 0 and 1.
-#'
-#' @return The logit of \code{x}.
-#'
-#' @author David Gerard
-logit <- function(x) {
-    .Call('_uglycat_logit', PACKAGE = 'uglycat', x)
-}
-
-#' The expit (logistic) function.
-#'
-#' @param x A double.
-#'
-#' @return The expit (logistic) of \code{x}.
-#'
-#' @author David Gerard
-expit <- function(x) {
-    .Call('_uglycat_expit', PACKAGE = 'uglycat', x)
 }
 

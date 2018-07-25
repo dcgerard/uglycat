@@ -1,14 +1,12 @@
 // Functions for use in correlation estimation
 
-#include <Rcpp.h>
+#include <RcppArmadillo.h>
 #include <math.h> // for M_PI
+#include <updog.h> // for log_sum_exp_2
 using namespace Rcpp;
 
 // External functions ----------------------
-double log_sum_exp(NumericVector x); // From utils.cpp
 NumericVector log_cum_sum_exp(NumericVector x); // From utils.cpp
-double log_sum_exp_2(double x, double y); // From utils.cpp
-double expit(double x); // From utils.cpp
 double pnormcop(double x, double y, double rho); // From gauss_cop.cpp
 
 // Global variables -------------------------
@@ -95,7 +93,7 @@ double corrlike(double atanh_rho,
     ind_cont = R_NegInf;
     for (int j = 0; j < K; j++) {
       for (int ell = 0; ell < K; ell++) {
-        ind_cont = log_sum_exp_2(ind_cont, prior_mat(j, ell) + lX(i, j) + lY(i, ell));
+        ind_cont = updog::log_sum_exp_2(ind_cont, prior_mat(j, ell) + lX(i, j) + lY(i, ell));
       }
     }
     llike = llike + ind_cont;

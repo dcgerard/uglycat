@@ -36,7 +36,7 @@ correst <- function(X, Y, g, h, is_log = FALSE) {
   if (!is_log) {
     stopifnot(abs(sum(g) - 1) < TOL, abs(sum(h) - 1) < TOL)
   } else {
-    stopifnot(abs(log_sum_exp(g)) < TOL, abs(log_sum_exp(h)) < TOL)
+    stopifnot(abs(updog::log_sum_exp(g)) < TOL, abs(updog::log_sum_exp(h)) < TOL)
   }
 
   ## Get log components -------------------------------
