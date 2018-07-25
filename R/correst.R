@@ -53,7 +53,7 @@ correst <- function(X, Y, g, h, is_log = FALSE) {
   }
 
   ## Initialize correlation via grid search
-  atanh_rhovec <- atanh(seq(-0.99, 0.99, length = 20))
+  atanh_rhovec <- atanh(seq(-0.99, 0.99, length = 10))
   lvec         <- rep(NA, length = length(atanh_rhovec))
   for (index in 1:length(atanh_rhovec)) {
     lvec[index] <- corrlike(atanh_rho = atanh_rhovec[index], lX = lX, lY = lY, lg = lg, lh = lh)
@@ -64,7 +64,9 @@ correst <- function(X, Y, g, h, is_log = FALSE) {
   oout <- stats::optim(par     = atanh_rho_init,
                        fn      = corrlike,
                        gr      = NULL,
-                       method  = "CG",
+                       method  = "L-BFGS-B",
+                       lower   = -6,
+                       upper   = 6,
                        control = list(fnscale = -1),
                        hessian = TRUE,
                        lX      = lX,
@@ -74,7 +76,7 @@ correst <- function(X, Y, g, h, is_log = FALSE) {
 
   ## Get parameter estimate and se
   zhat <- oout$par
-  se_zhat <- 1 / sqrt(-oout$hessian)
+  se_zhat <- 1 / sqrt(max(-oout$hessian, 0))
 
   return(list(zhat = zhat, se_zhat = se_zhat))
 }

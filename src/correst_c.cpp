@@ -69,19 +69,40 @@ double corrlike(double atanh_rho,
 
   // Get prior_mat from cdf_mat ---------------------------
   Rcpp::NumericMatrix prior_mat(K, K);
+  double non_log_prior = 0;
   for (int j = 0; j < K; j++) {
     for (int ell = 0; ell < K; ell++) {
       if ((ell != 0) & (j != 0)) {
-        prior_mat(j, ell) = std::log(cdf_mat(j, ell) -
+        non_log_prior = cdf_mat(j, ell) -
           cdf_mat(j, ell - 1) -
           cdf_mat(j - 1, ell) +
-          cdf_mat(j - 1, ell - 1));
+          cdf_mat(j - 1, ell - 1);
+        if (non_log_prior < TOL) {
+          prior_mat(j, ell) = R_NegInf;
+        } else {
+          prior_mat(j, ell) = std::log(non_log_prior);
+        }
       } else if (j != 0) {
-        prior_mat(j, ell) = std::log(cdf_mat(j, ell) - cdf_mat(j - 1, ell));
+        non_log_prior = cdf_mat(j, ell) - cdf_mat(j - 1, ell);
+        if (non_log_prior < TOL) {
+          prior_mat(j, ell) = R_NegInf;
+        } else {
+          prior_mat(j, ell) = std::log(non_log_prior);
+        }
       } else if (ell != 0) {
-        prior_mat(j, ell) = std::log(cdf_mat(j, ell) - cdf_mat(j, ell - 1));
+        non_log_prior = cdf_mat(j, ell) - cdf_mat(j, ell - 1);
+        if (non_log_prior < TOL) {
+          prior_mat(j, ell) = R_NegInf;
+        } else {
+          prior_mat(j, ell) = std::log(non_log_prior);
+        }
       } else { // both are zero
-        prior_mat(j, ell) = std::log(cdf_mat(j, ell));
+        non_log_prior = cdf_mat(j, ell);
+        if (non_log_prior < TOL) {
+          prior_mat(j, ell) = R_NegInf;
+        } else {
+          prior_mat(j, ell) = std::log(non_log_prior);
+        }
       }
     }
   }
@@ -97,6 +118,15 @@ double corrlike(double atanh_rho,
       }
     }
     llike = llike + ind_cont;
+  }
+  if ((llike == R_NegInf) | (llike == R_PosInf) | (llike == R_NaN) | (llike == R_NaReal)) {
+    // List errout = List::create(Named("atanh_rho") = atanh_rho,
+    //                            Named("lX") = lX,
+    //                            Named("lY") = lY,
+    //                            Named("lg") = lg,
+    //                            Named("lh") = lh);
+    Rcpp::Rcout << atanh_rho << std::endl;
+    Rcpp::stop("corrlike: non-finite likelihood");
   }
   return llike;
 }

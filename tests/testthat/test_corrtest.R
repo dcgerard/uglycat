@@ -3,53 +3,25 @@ context("corrtest")
 test_that("corrtest works", {
   set.seed(1)
   itermax <- 500
-  z <- rep(NA, length = itermax)
-  sez <- rep(NA, length = itermax)
-  # for (index in 1:itermax) {
-  # n <- 100
-  # k <- 7
-  # X <- matrix(stats::runif(n = n * k), nrow = n, ncol = k)
-  # Y <- matrix(stats::runif(n = n * k), nrow = n, ncol = k)
-  # g <- stats::runif(k)
-  # g <- g / sum(g)
-  # h <- g
-  # ceout <- correst(X = X, Y = Y, g = g, h = h)
-  # z[index] <- ceout$zhat
-  # sez[index] <- ceout$se_zhat
-  # }
-  # which_keep <- !is.na(z) & !is.na(sez)
-  # z <- z[which_keep]
-  # sez <- sez[which_keep]
-  # library(ashr)
-  # ash(betahat = z, sebetahat = sez) -> aout
-  #
-  #
-  # rhovec <- seq(-0.99, 0.99, length = 100)
-  # lvec <- rep(NA, length = length(rhovec))
-  # for (index in 1:length(rhovec)) {
-  #   lvec[index] <- corrlike(atanh_rho = atanh(rhovec[index]), lX = log(X), lY = log(Y), lg = log(g), lh = log(h))
-  # }
-  # plot(rhovec, lvec, type = "l")
+  n <- 100
+  k <- 7
+  X <- matrix(stats::runif(n = n * k), nrow = n, ncol = k)
+  Y <- matrix(stats::runif(n = n * k), nrow = n, ncol = k)
+  g <- stats::runif(k)
+  g <- g / sum(g)
+  h <- g
+  ceout <- correst(X = X, Y = Y, g = g, h = h)
+
+  rhovec <- seq(-0.99, 0.99, length = 100)
+  lvec <- rep(NA, length = length(rhovec))
+  for (index in 1:length(rhovec)) {
+    lvec[index] <- corrlike(atanh_rho = atanh(rhovec[index]), lX = log(X), lY = log(Y), lg = log(g), lh = log(h))
+  }
 })
 
 test_that("correst works on real data", {
-  library(updog)
-  data(snpdat)
-  snp1dat <- snpdat[snpdat$snp == "SNP2", ]
-  snp2dat <- snpdat[snpdat$snp == "SNP3", ]
-  uout1 <- flexdog(refvec  = snp1dat$counts,
-                   sizevec = snp1dat$size,
-                   ploidy  = 6,
-                   model   = "s1",
-                   bias    = 1,
-                   verbose = FALSE)
-  uout2 <- flexdog(refvec  = snp2dat$counts,
-                   sizevec = snp2dat$size,
-                   ploidy  = 6,
-                   model   = "s1",
-                   bias    = 1,
-                   verbose = FALSE)
-  cout <- correst_updog(uout1 = uout1, uout2 = uout2)
+  udat <- readRDS("udat.RDS")
+  cout <- correst_updog(uout1 = udat$uout1, uout2 = udat$uout2)
 })
 
 test_that("bvnl works", {
@@ -147,4 +119,14 @@ test_that("pnorm_cop_works", {
   expect_equal(pnormcop(x = 1, y = 0.5, rho = 0.4), 0.5)
   expect_equal(pnormcop(x = 0.2, y = 0.2, rho = 0), 0.04)
   expect_equal(pnormcop(x = 0, y = 1, rho = 0.4), 0)
+})
+
+test_that("errdat.RDS does not return NaN", {
+  errdat <- readRDS("./errdat.RDS")
+  clout <- corrlike(atanh_rho = errdat$atanh_rho,
+                    lX = errdat$lX,
+                    lY = errdat$lY,
+                    lg = errdat$lg,
+                    lh = errdat$lh)
+  expect_true(!is.nan(clout))
 })
