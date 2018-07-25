@@ -59,89 +59,81 @@ test_that("bvnl works", {
     Rmat <- matrix(c(1, rho, rho, 1), ncol = 2, nrow = 2)
     mvval <- mvtnorm::pmvnorm(upper = c(2, 2), corr = Rmat)[[1]]
     uval <- bvnl(dh = 2, dk = 2, r = rho)
-    expect_equal(mvval, uval)
+    expect_equal(mvval, uval, tol = 10^-5)
 
     rho <- -0.5
     Rmat <- matrix(c(1, rho, rho, 1), ncol = 2, nrow = 2)
     mvval <- mvtnorm::pmvnorm(upper = c(2, 2), corr = Rmat)[[1]]
     uval <- bvnl(dh = 2, dk = 2, r = rho)
-    expect_equal(mvval, uval)
+    expect_equal(mvval, uval, tol = 10^-5)
 
     rho <- 0.926
     Rmat <- matrix(c(1, rho, rho, 1), ncol = 2, nrow = 2)
     mvval <- mvtnorm::pmvnorm(upper = c(2, 1), corr = Rmat)[[1]]
     uval <- bvnl(dh = 2, dk = 1, r = rho)
-    cat(bvnl(dh = 2, dk = 2, r = 0.800), "\n")
-    cat(bvnl(dh = 2, dk = 2, r = 0.900), "\n")
     cat(bvnl(dh = 2, dk = 2, r = 0.924), "\n")
     cat(bvnl(dh = 2, dk = 2, r = 0.926), "\n")
-    cat(bvnl(dh = 2, dk = 2, r = 0.950), "\n")
-    cat(bvnl(dh = 2, dk = 2, r = 0.960), "\n")
-    cat(bvnl(dh = 2, dk = 2, r = 0.970), "\n")
-    cat(bvnl(dh = 2, dk = 2, r = 0.980), "\n")
-    cat(bvnl(dh = 2, dk = 2, r = 0.990), "\n")
-    cat(bvnl(dh = 2, dk = 2, r = 0.999999), "\n")
-    expect_equal(mvval, uval)
+    expect_equal(mvval, uval, tol = 10^-5)
 
     rho <- -0.99
     Rmat <- matrix(c(1, rho, rho, 1), ncol = 2, nrow = 2)
     mvval <- mvtnorm::pmvnorm(upper = c(2, 2), corr = Rmat)[[1]]
     uval <- bvnl(dh = 2, dk = 2, r = rho)
-    expect_equal(mvval, uval)
+    expect_equal(mvval, uval, tol = 10^-5)
 
     rho <- 1
     Rmat <- matrix(c(1, rho, rho, 1), ncol = 2, nrow = 2)
     mvval <- mvtnorm::pmvnorm(upper = c(2, 2), corr = Rmat)[[1]]
     uval <- bvnl(dh = 2, dk = 2, r = rho)
-    expect_equal(mvval, uval)
+    expect_equal(mvval, uval, tol = 10^-5)
 
     rho <- -1
     Rmat <- matrix(c(1, rho, rho, 1), ncol = 2, nrow = 2)
     mvval <- mvtnorm::pmvnorm(upper = c(2, 2), corr = Rmat)[[1]]
     uval <- bvnl(dh = 2, dk = 2, r = rho)
-    expect_equal(mvval, uval)
+    expect_equal(mvval, uval, tol = 10^-5)
 
     rho <- 0
     Rmat <- matrix(c(1, rho, rho, 1), ncol = 2, nrow = 2)
     mvval <- mvtnorm::pmvnorm(upper = c(2, 2), corr = Rmat)[[1]]
     uval <- bvnl(dh = 2, dk = 2, r = rho)
-    expect_equal(mvval, uval)
+    expect_equal(mvval, uval, tol = 10^-5)
 
     rho <- 0.1
     Rmat <- matrix(c(1, rho, rho, 1), ncol = 2, nrow = 2)
     mvval <- mvtnorm::pmvnorm(upper = c(2, 2), corr = Rmat)[[1]]
     uval <- bvnl(dh = 2, dk = 2, r = rho)
-    expect_equal(mvval, uval)
+    expect_equal(mvval, uval, tol = 10^-5)
 
     rho <- -0.1
     Rmat <- matrix(c(1, rho, rho, 1), ncol = 2, nrow = 2)
     mvval <- mvtnorm::pmvnorm(upper = c(2, 2), corr = Rmat)[[1]]
     uval <- bvnl(dh = 2, dk = 2, r = rho)
-    expect_equal(mvval, uval)
+    expect_equal(mvval, uval, tol = 10^-5)
 
     rho <- 0.5
     Rmat <- matrix(c(1, rho, rho, 1), ncol = 2, nrow = 2)
     mvval <- mvtnorm::pmvnorm(upper = c(2, Inf), corr = Rmat)[[1]]
     uval <- bvnl(dh = 2, dk = Inf, r = rho)
-    expect_equal(mvval, uval)
+    expect_equal(mvval, uval, tol = 10^-5)
 
     rho <- 0.5
     Rmat <- matrix(c(1, rho, rho, 1), ncol = 2, nrow = 2)
     mvval <- mvtnorm::pmvnorm(upper = c(-Inf, Inf), corr = Rmat)[[1]]
     uval <- bvnl(dh = -Inf, dk = Inf, r = rho)
-    expect_equal(mvval, uval)
+    expect_equal(mvval, uval, tol = 10^-5)
 
     rho <- 0.5
     Rmat <- matrix(c(1, rho, rho, 1), ncol = 2, nrow = 2)
     mvval <- mvtnorm::pmvnorm(upper = c(Inf, Inf), corr = Rmat)[[1]]
     uval <- bvnl(dh = Inf, dk = Inf, r = rho)
-    expect_equal(mvval, uval)
+    expect_equal(mvval, uval, tol = 10^-5)
 
     rho <- 0.5
     Rmat <- matrix(c(1, rho, rho, 1), ncol = 2, nrow = 2)
     mvval <- mvtnorm::pmvnorm(upper = c(-Inf, -Inf), corr = Rmat)[[1]]
     uval <- bvnl(dh = -Inf, dk = -Inf, r = rho)
-    expect_equal(mvval, uval)
+    expect_equal(mvval, uval, tol = 10^-5)
 
     # rho <- 0.5
     # Rmat <- matrix(c(1, rho, rho, 1), ncol = 2, nrow = 2)
