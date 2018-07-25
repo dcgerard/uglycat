@@ -2,7 +2,7 @@
 using namespace Rcpp;
 
 // Global variables -------------------------
-extern double TOL; // defined in correst_c.cpp
+double TOL = std::pow(10, -12);
 
 //' Log-sum-exponential trick.
 //'
@@ -97,4 +97,3 @@ double expit(double x) {
   double ev = 1.0 / (1.0 + std::exp(-x));
   return ev;
 }
-

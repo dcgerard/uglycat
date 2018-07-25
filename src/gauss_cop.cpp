@@ -4,7 +4,7 @@
 using namespace Rcpp;
 
 // Global variables -------------------------
-extern double TOL; // defined in correst_c.cpp
+extern double TOL; // defined in utils.cpp
 
 
 // This is wrong. Need to multiply by derivatives of inverse cdf's of normals.
@@ -185,6 +185,56 @@ double bvnu(double dh, double dk, double r) {
         edave = Rcpp::exp(asr_vec[ix]) * (sp_vec - ep);
         wsub = w[ix];
         bvn = (a * Rcpp::sum(edave * wsub) - bvn) / tp;
+
+        Rcpp::Rcout << "edave: "
+        << edave
+        << std::endl
+        << "wsub: "
+        << wsub
+        << std::endl
+        << "rs: "
+        << rs
+        << std::endl
+        << "ep: "
+        << ep
+        << std::endl
+        << "asr_vec: "
+        << asr_vec
+        << std::endl
+        << "sp_vec: "
+        << sp_vec
+        << std::endl
+        << "xs: "
+        << xs
+        << std::endl
+        << "xsub: "
+        << xsub
+        << std::endl
+        << "ix: "
+        << ix
+        << std::endl
+        << "as: "
+        << as
+        << std::endl
+        << "a: "
+        << a
+        << std::endl
+        << "bs: "
+        << bs
+        << std::endl
+        << "b: "
+        << b
+        << std::endl
+        << "c: "
+        << c
+        << std::endl
+        << "d: "
+        << d
+        << std::endl
+        << "sp: "
+        << sp
+        << std::endl
+        << std::endl;
       }
       if (r > 0.0) {
         bvn =  bvn + R::pnorm5(-std::max(h, k), 0.0, 1.0, 1, 0);

@@ -12,7 +12,7 @@ double expit(double x); // From utils.cpp
 double pnormcop(double x, double y, double rho); // From gauss_cop.cpp
 
 // Global variables -------------------------
-double TOL = 1000.0 * DBL_EPSILON;
+extern double TOL; // defined in utils.cpp
 
 //' Likelihood of the correlation given the count data.
 //'
