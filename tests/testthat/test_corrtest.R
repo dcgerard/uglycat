@@ -27,7 +27,7 @@ test_that("corrtest works", {
   # rhovec <- seq(-0.99, 0.99, length = 100)
   # lvec <- rep(NA, length = length(rhovec))
   # for (index in 1:length(rhovec)) {
-  #   lvec[index] <- corrlike(atanch_rho = atanh(rhovec[index]), lX = log(X), lY = log(Y), lg = log(g), lh = log(h))
+  #   lvec[index] <- corrlike(atanh_rho = atanh(rhovec[index]), lX = log(X), lY = log(Y), lg = log(g), lh = log(h))
   # }
   # plot(rhovec, lvec, type = "l")
 })
