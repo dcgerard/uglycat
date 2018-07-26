@@ -21,7 +21,7 @@ Citation
 
 To cite package 'uglycat' in publications use:
 
-> > > David Gerard (2018). uglycat: Using Genotype Likelihoods Yields Correlations and T-statistics. R package version 0.0.0.9000. URL <https://github.com/dcgerard/uglycat>.
+> David Gerard (2018). uglycat: Using Genotype Likelihoods Yields Correlations and T-statistics. R package version 0.0.0.9000. URL <https://github.com/dcgerard/uglycat>.
 
 A BibTeX entry for LaTeX users is
 
