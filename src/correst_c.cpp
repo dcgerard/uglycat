@@ -5,7 +5,6 @@
 #include <updog.h> // for log_sum_exp_2()
 #include <dlib/optimization.h> // for find_max_single_variable() and possibly derivative()
 using namespace Rcpp;
-using namespace dlib;
 
 
 // External functions ----------------------

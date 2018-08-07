@@ -15,6 +15,9 @@
 #'     of dosage \code{j - 1} for SNP 2.
 #' @param is_log A logical. Are \code{X}, \code{Y}, \code{g}, and \code{h} all on the
 #'     log-scale (\code{TRUE}) or not (\code{FALSE}).
+#' @param use_cpp A logical Should we use the C++ implementation of the
+#'     optimization (\code{TRUE}) or not (\code{FALSE})? The fully C++ implementation
+#'     seems to be about 20 percent faster.
 #'
 #' @return A list with the following elements:
 #' \describe{
@@ -28,7 +31,7 @@
 #'
 #' @export
 #'
-correst <- function(X, Y, g, h, is_log = FALSE) {
+correst <- function(X, Y, g, h, is_log = FALSE, use_cpp = TRUE) {
   ## Test input ---------------------------------------
   assertthat::assert_that(is.matrix(X))
   assertthat::assert_that(is.numeric(X))
@@ -61,7 +64,7 @@ correst <- function(X, Y, g, h, is_log = FALSE) {
   }
 
   ## Initialize correlation via grid search
-  nrho <- 10
+  nrho <- 5
   atanh_rhovec <- atanh(seq(-0.99, 0.99, length = nrho))
   lvec         <- rep(NA, length = length(atanh_rhovec))
   for (index in 1:length(atanh_rhovec)) {
@@ -69,19 +72,28 @@ correst <- function(X, Y, g, h, is_log = FALSE) {
   }
   atanh_rho_init <- atanh_rhovec[which.max(lvec)]
 
-  ## Use optim to get maximizer of corrlike -----------
-  oout <- stats::optim(par     = atanh_rho_init,
-                       fn      = corrlike,
-                       gr      = NULL,
-                       method  = "L-BFGS-B",
-                       lower   = -6,
-                       upper   = 6,
-                       control = list(fnscale = -1),
-                       hessian = TRUE,
-                       lX      = lX,
-                       lY      = lY,
-                       lg      = lg,
-                       lh      = lh)
+  if (use_cpp) {
+    ## Use new corr_optim function to get maximizer of corrlike ---
+    oout <- corr_optim(atanh_rho = atanh_rho_init,
+                       lX        = lX,
+                       lY        = lY,
+                       lg        = lg,
+                       lh        = lh)
+  } else{
+    ## Use optim to get maximizer of corrlike -----------
+    oout <- stats::optim(par     = atanh_rho_init,
+                         fn      = corrlike,
+                         gr      = NULL,
+                         method  = "L-BFGS-B",
+                         lower   = -6,
+                         upper   = 6,
+                         control = list(fnscale = -1),
+                         hessian = TRUE,
+                         lX      = lX,
+                         lY      = lY,
+                         lg      = lg,
+                         lh      = lh)
+  }
 
   ## Get parameter estimate and se -------------------------
   zhat <- oout$par
@@ -141,7 +153,7 @@ correst_updog <- function(uout1, uout2) {
   lg <- log(uout1$gene_dist)
   lh <- log(uout2$gene_dist)
 
-  cout <- correst(X = lX, Y = lY, g = lg, h = lh, is_log = TRUE)
+  cout <- correst(X = lX, Y = lY, g = lg, h = lh, is_log = TRUE, use_cpp = TRUE)
 
   return(cout)
 }

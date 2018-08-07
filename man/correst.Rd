@@ -5,7 +5,7 @@
 \title{Estimate the correlation between two SNPs from the genotype likelihoods and the
 genotype distribution.}
 \usage{
-correst(X, Y, g, h, is_log = FALSE)
+correst(X, Y, g, h, is_log = FALSE, use_cpp = TRUE)
 }
 \arguments{
 \item{X}{A matrix of genotype likelihoods. Element \code{(i, j)} is the
@@ -24,6 +24,10 @@ of dosage \code{j - 1} for SNP 2.}
 
 \item{is_log}{A logical. Are \code{X}, \code{Y}, \code{g}, and \code{h} all on the
 log-scale (\code{TRUE}) or not (\code{FALSE}).}
+
+\item{use_cpp}{A logical Should we use the C++ implementation of the
+optimization (\code{TRUE}) or not (\code{FALSE})? The fully C++ implementation
+seems to be about 20 percent faster.}
 }
 \value{
 A list with the following elements:
