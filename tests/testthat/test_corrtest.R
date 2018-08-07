@@ -87,10 +87,11 @@ test_that("corroptim works", {
 test_that("correst works on real data", {
   udat <- readRDS("udat.RDS")
   cout <- correst_updog(uout1 = udat$uout1, uout2 = udat$uout2)
+})
 
-  # microbenchmark::microbenchmark(
-  #   cout <- correst_updog(uout1 = udat$uout1, uout2 = udat$uout2)
-  # )
+test_that("correst works on real data 2", {
+  udat <- readRDS("harddat.RDS")
+  cout <- correst_updog(uout1 = udat$uout1, uout2 = udat$uout2)
 })
 
 test_that("bvnl works", {
