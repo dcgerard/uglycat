@@ -19,6 +19,71 @@ test_that("corrtest works", {
   }
 })
 
+test_that("corroptim works", {
+  if (.Platform$OS.type == "windows") {
+    skip("optim is throwing weird results in i386.")
+  }
+  set.seed(1)
+  itermax <- 500
+  n <- 100
+  k <- 7
+  X <- matrix(stats::runif(n = n * k), nrow = n, ncol = k)
+  Y <- matrix(stats::runif(n = n * k), nrow = n, ncol = k)
+  g <- stats::runif(k)
+  g <- g / sum(g)
+  h <- g
+
+  lX <- log(X)
+  lY <- log(Y)
+  lg <- log(g)
+  lh <- log(h)
+
+  atanh_rho <- 5
+
+  coout <- corr_optim(atanh_rho = atanh_rho,
+                      lX = lX,
+                      lY = lY,
+                      lg = lg,
+                      lh = lh)
+
+  oout <- optim(par = atanh_rho,
+                fn = corrlike,
+                method = "L-BFGS-B",
+                lower = -6,
+                upper = 6,
+                control = list(fnscale = -1),
+                hessian = TRUE,
+                lX = lX,
+                lY = lY,
+                lg = lg,
+                lh = lh)
+
+  expect_equal(oout$par, coout$par)
+  expect_equal(oout$value, coout$value)
+  expect_equal(c(oout$hessian), coout$hessian, tol = 10^-5)
+
+  ## Three times speedup
+  # microbenchmark::microbenchmark(
+  #   coout <- corr_optim(atanh_rho = atanh_rho,
+  #                       lX = lX,
+  #                       lY = lY,
+  #                       lg = lg,
+  #                       lh = lh),
+  #   oout <- optim(par = atanh_rho,
+  #                 fn = corrlike,
+  #                 method = "L-BFGS-B",
+  #                 lower = -6,
+  #                 upper = 6,
+  #                 control = list(fnscale = -1),
+  #                 hessian = TRUE,
+  #                 lX = lX,
+  #                 lY = lY,
+  #                 lg = lg,
+  #                 lh = lh)
+  # )
+
+})
+
 test_that("correst works on real data", {
   udat <- readRDS("udat.RDS")
   cout <- correst_updog(uout1 = udat$uout1, uout2 = udat$uout2)

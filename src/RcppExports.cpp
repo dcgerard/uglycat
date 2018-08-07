@@ -3,6 +3,8 @@
 
 #include <RcppArmadillo.h>
 #include <Rcpp.h>
+// [[Rcpp::depends(dlib)]]
+// [[Rcpp::plugins(cpp11)]]
 
 using namespace Rcpp;
 
@@ -31,6 +33,21 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const NumericVector& >::type lg(lgSEXP);
     Rcpp::traits::input_parameter< const NumericVector& >::type lh(lhSEXP);
     rcpp_result_gen = Rcpp::wrap(corrlike(atanh_rho, lX, lY, lg, lh));
+    return rcpp_result_gen;
+END_RCPP
+}
+// corr_optim
+List corr_optim(double atanh_rho, const NumericMatrix& lX, const NumericMatrix& lY, const NumericVector& lg, const NumericVector& lh);
+RcppExport SEXP _uglycat_corr_optim(SEXP atanh_rhoSEXP, SEXP lXSEXP, SEXP lYSEXP, SEXP lgSEXP, SEXP lhSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< double >::type atanh_rho(atanh_rhoSEXP);
+    Rcpp::traits::input_parameter< const NumericMatrix& >::type lX(lXSEXP);
+    Rcpp::traits::input_parameter< const NumericMatrix& >::type lY(lYSEXP);
+    Rcpp::traits::input_parameter< const NumericVector& >::type lg(lgSEXP);
+    Rcpp::traits::input_parameter< const NumericVector& >::type lh(lhSEXP);
+    rcpp_result_gen = Rcpp::wrap(corr_optim(atanh_rho, lX, lY, lg, lh));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -104,6 +121,7 @@ END_RCPP
 static const R_CallMethodDef CallEntries[] = {
     {"_uglycat_dist_from_marg", (DL_FUNC) &_uglycat_dist_from_marg, 3},
     {"_uglycat_corrlike", (DL_FUNC) &_uglycat_corrlike, 5},
+    {"_uglycat_corr_optim", (DL_FUNC) &_uglycat_corr_optim, 5},
     {"_uglycat_bvnu", (DL_FUNC) &_uglycat_bvnu, 3},
     {"_uglycat_bvnl", (DL_FUNC) &_uglycat_bvnl, 3},
     {"_uglycat_pnormcop", (DL_FUNC) &_uglycat_pnormcop, 3},

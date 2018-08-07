@@ -1,9 +1,12 @@
 // Functions for use in correlation estimation
 
 #include <RcppArmadillo.h>
-#include <math.h> // for M_PI
-#include <updog.h> // for log_sum_exp_2
+#include <math.h> // for M_PI()
+#include <updog.h> // for log_sum_exp_2()
+#include <dlib/optimization.h> // for find_max_single_variable() and possibly derivative()
 using namespace Rcpp;
+using namespace dlib;
+
 
 // External functions ----------------------
 NumericVector log_cum_sum_exp(NumericVector x); // From utils.cpp
@@ -160,3 +163,61 @@ double corrlike(double atanh_rho,
   }
   return llike;
 }
+
+
+// Functor object to pass to dlib for optimization
+class corrlike_functor
+{
+  // Access specifier
+  public:
+
+    // Data Members
+    NumericMatrix lX;
+    NumericMatrix lY;
+    NumericVector lg;
+    NumericVector lh;
+
+    // Member Functions()
+    double operator()(const double atanh_rho) const {
+      return corrlike(atanh_rho, lX, lY, lg, lh);
+    }
+};
+
+
+// [[Rcpp::export]]
+List corr_optim(double atanh_rho,
+                const NumericMatrix& lX,
+                const NumericMatrix& lY,
+                const NumericVector& lg,
+                const NumericVector& lh) {
+
+  // Make a functor of one variable so I can use dlib
+  corrlike_functor my_func;
+  my_func.lX = lX;
+  my_func.lY = lY;
+  my_func.lg = lg;
+  my_func.lh = lh;
+
+  // atanh_rho is changed to max value since passed by reference.
+  double atanh_out = dlib::find_max_single_variable(
+    my_func, atanh_rho, -6.0, 6.0, 1e-3, 100, 1.0);
+
+  // double atanh_out = find_max_using_approximate_derivatives(bfgs_search_strategy(),
+  //                                        objective_delta_stop_strategy(1e-7),
+  //                                        my_func, atanh_rho, -1);
+
+  // hessian by hand
+  double h = 0.001;
+  double hout = (my_func(atanh_rho + h) - 2.0 * my_func(atanh_rho) + my_func(atanh_rho - h)) / (h * h);
+
+  return List::create(Named("par") = atanh_rho,
+                      Named("value") = atanh_out,
+                      Named("hessian") = hout);
+}
+
+
+
+
+
+
+

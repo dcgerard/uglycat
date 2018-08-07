@@ -61,7 +61,8 @@ correst <- function(X, Y, g, h, is_log = FALSE) {
   }
 
   ## Initialize correlation via grid search
-  atanh_rhovec <- atanh(seq(-0.99, 0.99, length = 10))
+  nrho <- 10
+  atanh_rhovec <- atanh(seq(-0.99, 0.99, length = nrho))
   lvec         <- rep(NA, length = length(atanh_rhovec))
   for (index in 1:length(atanh_rhovec)) {
     lvec[index] <- corrlike(atanh_rho = atanh_rhovec[index], lX = lX, lY = lY, lg = lg, lh = lh)

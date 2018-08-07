@@ -13,11 +13,13 @@ RoxygenNote: 6.0.1
 Imports: assertthat,
     Rcpp,
     updog (>= 1.0.1),
-    RcppArmadillo
+    RcppArmadillo,
+    dlib
 Suggests: testthat,
     mvtnorm,
     covr
 Remotes: dcgerard/updog
 LinkingTo: Rcpp,
     updog,
-    RcppArmadillo
+    RcppArmadillo,
+    dlib

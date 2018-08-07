@@ -42,6 +42,10 @@ corrlike <- function(atanh_rho, lX, lY, lg, lh) {
     .Call('_uglycat_corrlike', PACKAGE = 'uglycat', atanh_rho, lX, lY, lg, lh)
 }
 
+corr_optim <- function(atanh_rho, lX, lY, lg, lh) {
+    .Call('_uglycat_corr_optim', PACKAGE = 'uglycat', atanh_rho, lX, lY, lg, lh)
+}
+
 #' A C++ implementation of bivariate normal probabilities, derived from the MATLAB code of Alan Genz.
 #'
 #' Calculates the probability that x > dh and y > dk.
