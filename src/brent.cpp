@@ -2,10 +2,11 @@
 # include <cstdlib>
 # include <ctime>
 # include <iostream>
+# include <Rcpp.h>
 
 using namespace std;
 
-# include "brent.hpp"
+# include "brent.h"
 
 namespace brent{
 
@@ -646,13 +647,13 @@ double local_min_rc ( double &a, double &b, int &status, double value )
   {
     if ( b <= a )
     {
-      cout << "\n";
-      cout << "LOCAL_MIN_RC - Fatal error!\n";
-      cout << "  A < B is required, but\n";
-      cout << "  A = " << a << "\n";
-      cout << "  B = " << b << "\n";
+      Rcpp::Rcout << "\n";
+      Rcpp::Rcout << "LOCAL_MIN_RC - Fatal error!\n";
+      Rcpp::Rcout << "  A < B is required, but\n";
+      Rcpp::Rcout << "  A = " << a << "\n";
+      Rcpp::Rcout << "  B = " << b << "\n";
       status = -1;
-      exit ( 1 );
+      Rcpp::stop("1");
     }
     c = 0.5 * ( 3.0 - sqrt ( 5.0 ) );
 
@@ -991,7 +992,7 @@ void timestamp ( )
 
   strftime ( time_buffer, TIME_SIZE, "%d %B %Y %I:%M:%S %p", tm );
 
-  cout << time_buffer << "\n";
+  Rcpp::Rcout << time_buffer << "\n";
 
   return;
 }

@@ -3,7 +3,7 @@
 #include <RcppArmadillo.h>
 #include <math.h> // for M_PI()
 #include <updog.h> // for log_sum_exp_2()
-#include "brent.hpp" // for brent::local_min and brent::func_base
+#include "brent.h" // for brent::local_min and brent::func_base
 
 
 using namespace Rcpp;
