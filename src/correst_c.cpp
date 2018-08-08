@@ -3,7 +3,9 @@
 #include <RcppArmadillo.h>
 #include <math.h> // for M_PI()
 #include <updog.h> // for log_sum_exp_2()
-#include <dlib/optimization.h> // for find_max_single_variable() and possibly derivative()
+#include "brent.hpp" // for brent::local_min and brent::func_base
+
+
 using namespace Rcpp;
 
 
@@ -164,22 +166,23 @@ double corrlike(double atanh_rho,
 }
 
 
-// Functor object to pass to dlib for optimization
-class corrlike_functor
+// Functor object to pass to brent::local_min
+// Negative log likelihood for minimum
+class myFunctorClass : public brent::func_base
 {
-  // Access specifier
-  public:
-
-    // Data Members
-    NumericMatrix lX;
-    NumericMatrix lY;
-    NumericVector lg;
-    NumericVector lh;
-
-    // Member Functions()
-    double operator()(const double atanh_rho) const {
-      return corrlike(atanh_rho, lX, lY, lg, lh);
-    }
+private:
+  NumericMatrix lX;
+  NumericMatrix lY;
+  NumericVector lg;
+  NumericVector lh;
+public:
+  myFunctorClass (NumericMatrix lX_,
+                  NumericMatrix lY_,
+                  NumericVector lg_,
+                  NumericVector lh_) : lX(lX_), lY(lY_), lg(lg_), lh(lh_) {}
+  double operator() (double atanh_rho) {
+    return -1.0 * corrlike(atanh_rho, lX, lY, lg, lh);
+  }
 };
 
 
@@ -190,24 +193,19 @@ List corr_optim(double atanh_rho,
                 const NumericVector& lg,
                 const NumericVector& lh) {
 
-  // Make a functor of one variable so I can use dlib
-  corrlike_functor my_func;
-  my_func.lX = lX;
-  my_func.lY = lY;
-  my_func.lg = lg;
-  my_func.lh = lh;
+  myFunctorClass my_func(lX, lY, lg, lh);
 
   // atanh_rho is changed to max value since passed by reference.
-  double atanh_out = dlib::find_max_single_variable(
-    my_func, atanh_rho, -1e200, 1e200, 1e-3, 100, 10);
+  double atanh_out = brent::local_min(-6, 6, 0.001, my_func, atanh_rho);
 
   // hessian by hand
   double h = 0.001;
   double hout = (my_func(atanh_rho + h) - 2.0 * my_func(atanh_rho) + my_func(atanh_rho - h)) / (h * h);
 
+  // Multiply value and hessian by negative 1 because function was negative
   return List::create(Named("par") = atanh_rho,
-                      Named("value") = atanh_out,
-                      Named("hessian") = hout);
+                      Named("value") = -1.0 * atanh_out,
+                      Named("hessian") = -1.0 * hout);
 }
 
 

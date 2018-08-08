@@ -58,11 +58,11 @@ test_that("corroptim works", {
                 lg = lg,
                 lh = lh)
 
-  expect_equal(oout$par, coout$par, tol = 10^-5)
-  expect_equal(oout$value, coout$value, tol = 10 ^ -5)
-  expect_equal(c(oout$hessian), coout$hessian, tol = 10^-5)
+  expect_equal(oout$par, coout$par, tol = 10^-3)
+  expect_equal(oout$value, coout$value, tol = 10 ^ -3)
+  expect_equal(c(oout$hessian), coout$hessian, tol = 10^-3)
 
-  ## two times speedup
+  # two times speedup
   # microbenchmark::microbenchmark(
   #   coout <- corr_optim(atanh_rho = atanh_rho,
   #                       lX = lX,
