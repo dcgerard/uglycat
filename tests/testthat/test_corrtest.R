@@ -58,11 +58,11 @@ test_that("corroptim works", {
                 lg = lg,
                 lh = lh)
 
-  expect_equal(oout$par, coout$par)
-  expect_equal(oout$value, coout$value)
+  expect_equal(oout$par, coout$par, tol = 10^-5)
+  expect_equal(oout$value, coout$value, tol = 10 ^ -5)
   expect_equal(c(oout$hessian), coout$hessian, tol = 10^-5)
 
-  ## Three times speedup
+  ## two times speedup
   # microbenchmark::microbenchmark(
   #   coout <- corr_optim(atanh_rho = atanh_rho,
   #                       lX = lX,
@@ -91,6 +91,11 @@ test_that("correst works on real data", {
 
 test_that("correst works on real data 2", {
   udat <- readRDS("harddat.RDS")
+  cout <- correst_updog(uout1 = udat$uout1, uout2 = udat$uout2)
+})
+
+test_that("correst works on real data 2", {
+  udat <- readRDS("harddat2.RDS")
   cout <- correst_updog(uout1 = udat$uout1, uout2 = udat$uout2)
 })
 

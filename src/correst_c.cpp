@@ -199,13 +199,7 @@ List corr_optim(double atanh_rho,
 
   // atanh_rho is changed to max value since passed by reference.
   double atanh_out = dlib::find_max_single_variable(
-    my_func, atanh_rho, -6.0, 6.0, 0.001, 100, 3.0);
-  // we use an initial window of 3 because we did a grid search of length 5 over -2.6 to 2.6
-  // to get intial value
-
-  // double atanh_out = dlib::find_max_using_approximate_derivatives(dlib::bfgs_search_strategy(),
-  //                                        dlib::objective_delta_stop_strategy(1e-3),
-  //                                        my_func, atanh_rho, -1);
+    my_func, atanh_rho, -1e200, 1e200, 1e-3, 100, 10);
 
   // hessian by hand
   double h = 0.001;
