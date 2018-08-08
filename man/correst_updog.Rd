@@ -4,7 +4,7 @@
 \alias{correst_updog}
 \title{Estimate correlation between two SNPs from two updog fits.}
 \usage{
-correst_updog(uout1, uout2)
+correst_updog(uout1, uout2, use_cpp = TRUE)
 }
 \arguments{
 \item{uout1}{A member of class \code{\link[updog]{flexdog}},
@@ -12,6 +12,9 @@ which is the output of fitting \code{flexdog} to one SNP.}
 
 \item{uout2}{A member of class \code{\link[updog]{flexdog}},
 which is the output of fitting \code{flexdog} to the other SNP.}
+
+\item{use_cpp}{A logical. Should we use the C++ implementation (\code{TRUE})
+or not (\code{FALSE})?}
 }
 \description{
 Estimate correlation between two SNPs from two updog fits.

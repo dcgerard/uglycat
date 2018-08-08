@@ -117,12 +117,13 @@ correst <- function(X, Y, g, h, is_log = FALSE, use_cpp = TRUE) {
 #'     which is the output of fitting \code{flexdog} to one SNP.
 #' @param uout2 A member of class \code{\link[updog]{flexdog}},
 #'     which is the output of fitting \code{flexdog} to the other SNP.
-#'
+#' @param use_cpp A logical. Should we use the C++ implementation (\code{TRUE})
+#'     or not (\code{FALSE})?
 #'
 #' @export
 #'
 #' @author David Gerard
-correst_updog <- function(uout1, uout2) {
+correst_updog <- function(uout1, uout2, use_cpp = TRUE) {
   assertthat::assert_that(updog::is.flexdog(uout1))
   assertthat::assert_that(updog::is.flexdog(uout2))
 
@@ -153,7 +154,7 @@ correst_updog <- function(uout1, uout2) {
   lg <- log(uout1$gene_dist)
   lh <- log(uout2$gene_dist)
 
-  cout <- correst(X = lX, Y = lY, g = lg, h = lh, is_log = TRUE, use_cpp = TRUE)
+  cout <- correst(X = lX, Y = lY, g = lg, h = lh, is_log = TRUE, use_cpp = use_cpp)
 
   return(cout)
 }
