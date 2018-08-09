@@ -136,3 +136,7 @@ log_cum_sum_exp <- function(x) {
     .Call('_uglycat_log_cum_sum_exp', PACKAGE = 'uglycat', x)
 }
 
+sum_out_prods <- function(pm1, pm2, crossmat) {
+    .Call('_uglycat_sum_out_prods', PACKAGE = 'uglycat', pm1, pm2, crossmat)
+}
+

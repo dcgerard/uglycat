@@ -27,3 +27,45 @@ NumericVector log_cum_sum_exp(NumericVector x) {
 
   return y;
 }
+
+
+// Calculate \sum_n \sum_j \sum_l cross_mat(j, l) * pm1(n, j) * pm2(n, l)
+// [[Rcpp::export]]
+double sum_out_prods(const NumericMatrix& pm1,
+                     const NumericMatrix& pm2,
+                     const NumericMatrix& crossmat) {
+  // check input -------------------------------
+  if (pm1.nrow() != pm2.nrow()) {
+    Rcpp::stop("sum_out_prods: pm1 and pm2 should have the same dimension");
+  }
+  if (pm1.ncol() != pm2.ncol()) {
+    Rcpp::stop("sum_out_prods: pm1 and pm2 should have the same dimension");
+  }
+  if (pm1.ncol() != crossmat.ncol()) {
+    Rcpp::stop("sum_out_prods: pm1 and crossmat should have the same number of columns");
+  }
+  if (crossmat.ncol() != crossmat.nrow()) {
+    Rcpp::stop("sum_out_prods: crossmat should have the same number of rows as columns.");
+  }
+
+  double cov = 0.0;
+  int n = pm1.nrow();
+  int ploidy = pm1.ncol() - 1;
+
+  for (int i = 0; i < n; i++) {
+    for (int j = 0; j <= ploidy; j++) {
+      for (int ell = 0; ell <= ploidy; ell++) {
+        cov += crossmat(j, ell) * pm1(i, j) * pm2(i, ell);
+      }
+    }
+  }
+
+  return cov;
+}
+
+
+
+
+
+
+

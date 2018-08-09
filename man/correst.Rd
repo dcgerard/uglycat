@@ -5,7 +5,7 @@
 \title{Estimate the correlation between two SNPs from the genotype likelihoods and the
 genotype distribution.}
 \usage{
-correst(X, Y, g, h, is_log = FALSE, use_cpp = TRUE)
+correst(X, Y, g, h, is_log = FALSE, method = c("mleCpp", "mleR"))
 }
 \arguments{
 \item{X}{A matrix of genotype likelihoods. Element \code{(i, j)} is the
@@ -25,17 +25,18 @@ of dosage \code{j - 1} for SNP 2.}
 \item{is_log}{A logical. Are \code{X}, \code{Y}, \code{g}, and \code{h} all on the
 log-scale (\code{TRUE}) or not (\code{FALSE}).}
 
-\item{use_cpp}{A logical Should we use the C++ implementation of the
-optimization (\code{TRUE}) or not (\code{FALSE})? The fully C++ implementation
-seems to be about 20 percent faster.}
+\item{method}{Which method should we use to estimate the correlation? MLE using
+C++ (\code{"mleCpp"}) or  MLE using R (\code{"mleR"})?}
 }
 \value{
 A list with the following elements:
 \describe{
-  \item{\code{zhat}}{The estimate of the atanh of the correlation of the SNPs on the
-      transformed scale}
-  \item{\code{se_zhat}}{The estimated standard error of zhat.}
+  \item{\code{zhat_gc}}{The estimate of the atanh of the correlation of the SNPs on the
+      gaussian copula scale}
+  \item{\code{sezhat_gc}}{The estimated standard error of zhat_gc.}
   \item{\code{corest}}{The estimated correlation of the SNPs on the original scale.}
+  \item{\code{zhat}}{\code{atanh(corest)}}
+  \item{\code{sezhat}}{The estimated standard error of zhat.}
 }
 }
 \description{

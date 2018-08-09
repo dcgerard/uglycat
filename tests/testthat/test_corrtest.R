@@ -87,14 +87,25 @@ test_that("corroptim works", {
 test_that("correst works on real data", {
   udat <- readRDS("udat.RDS")
   cout <- correst_updog(uout1 = udat$uout1, uout2 = udat$uout2)
+  coutind <- correst_ind_updog(uout1 = udat$uout1, uout2 = udat$uout2)
+  coutone <- correst_onestep_updog(uout1 = udat$uout1, uout2 = udat$uout2)
 })
 
 test_that("correst works on real data 2", {
   udat <- readRDS("harddat.RDS")
   cout <- correst_updog(uout1 = udat$uout1, uout2 = udat$uout2)
+  coutind <- correst_ind_updog(uout1 = udat$uout1, uout2 = udat$uout2)
+  coutone <- correst_onestep_updog(uout1 = udat$uout1, uout2 = udat$uout2)
+
+  # microbenchmark::microbenchmark(
+  #   cout <- correst_updog(uout1 = udat$uout1, uout2 = udat$uout2, method = "mleR"),
+  #   cout <- correst_updog(uout1 = udat$uout1, uout2 = udat$uout2, method = "mleCpp"),
+  #   cout <- correst_ind_updog(uout1 = udat$uout1, uout2 = udat$uout2),
+  #   cout <- correst_onestep_updog(uout1 = udat$uout1, uout2 = udat$uout2)
+  # )
 })
 
-test_that("correst works on real data 2", {
+test_that("correst works on real data 3", {
   udat <- readRDS("harddat2.RDS")
   cout <- correst_updog(uout1 = udat$uout1, uout2 = udat$uout2)
 })

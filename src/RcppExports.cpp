@@ -115,6 +115,19 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// sum_out_prods
+double sum_out_prods(const NumericMatrix& pm1, const NumericMatrix& pm2, const NumericMatrix& crossmat);
+RcppExport SEXP _uglycat_sum_out_prods(SEXP pm1SEXP, SEXP pm2SEXP, SEXP crossmatSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const NumericMatrix& >::type pm1(pm1SEXP);
+    Rcpp::traits::input_parameter< const NumericMatrix& >::type pm2(pm2SEXP);
+    Rcpp::traits::input_parameter< const NumericMatrix& >::type crossmat(crossmatSEXP);
+    rcpp_result_gen = Rcpp::wrap(sum_out_prods(pm1, pm2, crossmat));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_uglycat_dist_from_marg", (DL_FUNC) &_uglycat_dist_from_marg, 3},
@@ -125,6 +138,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_uglycat_pnormcop", (DL_FUNC) &_uglycat_pnormcop, 3},
     {"_uglycat_gen_like", (DL_FUNC) &_uglycat_gen_like, 6},
     {"_uglycat_log_cum_sum_exp", (DL_FUNC) &_uglycat_log_cum_sum_exp, 1},
+    {"_uglycat_sum_out_prods", (DL_FUNC) &_uglycat_sum_out_prods, 3},
     {NULL, NULL, 0}
 };
 
