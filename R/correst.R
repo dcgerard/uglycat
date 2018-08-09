@@ -282,6 +282,8 @@ z_to_z <- function(z, g_cdf, h_cdf) {
 #'
 #' @author David Gerard
 #'
+#' @export
+#'
 correst_onestep_updog <- function(uout1, uout2) {
   assertthat::assert_that(updog::is.flexdog(uout1))
   assertthat::assert_that(updog::is.flexdog(uout2))

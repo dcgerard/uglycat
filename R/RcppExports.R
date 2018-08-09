@@ -136,6 +136,16 @@ log_cum_sum_exp <- function(x) {
     .Call('_uglycat_log_cum_sum_exp', PACKAGE = 'uglycat', x)
 }
 
+#' Calculate \sum_n \sum_j \sum_l cross_mat(j, l) * pm1(n, j) * pm2(n, l)
+#'
+#' @param pm1 A matrix of posterior probabilities for SNP 1. Element (i, j)
+#'     is the posterior probability of genotype j - 1 in individual i.
+#' @param pm2 A matrix of posterior probabilities for SNP 2. Element (i, j)
+#'     is the posterior probability of genotype j - 1 in individual i.
+#' @param crossmat A matrix of probabilities. Element (j,k) is the
+#'     prior probability of genotype j-1 in SNP 1 and k-1 in SNP 2.
+#'
+#' @author David Gerard
 sum_out_prods <- function(pm1, pm2, crossmat) {
     .Call('_uglycat_sum_out_prods', PACKAGE = 'uglycat', pm1, pm2, crossmat)
 }
