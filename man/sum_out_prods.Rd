@@ -2,7 +2,7 @@
 % Please edit documentation in R/RcppExports.R
 \name{sum_out_prods}
 \alias{sum_out_prods}
-\title{Calculate \sum_n \sum_j \sum_l cross_mat(j, l) * pm1(n, j) * pm2(n, l)}
+\title{Calculate sum_n sum_j sum_l cross_mat(j, l) * pm1(n, j) * pm2(n, l)}
 \usage{
 sum_out_prods(pm1, pm2, crossmat)
 }
@@ -17,7 +17,7 @@ is the posterior probability of genotype j - 1 in individual i.}
 prior probability of genotype j-1 in SNP 1 and k-1 in SNP 2.}
 }
 \description{
-Calculate \sum_n \sum_j \sum_l cross_mat(j, l) * pm1(n, j) * pm2(n, l)
+Calculate sum_n sum_j sum_l cross_mat(j, l) * pm1(n, j) * pm2(n, l)
 }
 \author{
 David Gerard
