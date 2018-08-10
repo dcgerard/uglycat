@@ -297,8 +297,13 @@ correst_onestep_updog <- function(uout1, uout2) {
   diffz <- function(z) {
     corrhat_naive - z_to_corr(z = z, g_cdf = g_cdf, h_cdf = h_cdf)
   }
-  uniout <- stats::uniroot(f = diffz, interval = c(-6, 6))
-  ztilde <- uniout$root
+  if (sign(diffz(-6) != sign(diffz(6)))) {
+    uniout <- stats::uniroot(f = diffz, interval = c(-6, 6))
+    ztilde <- uniout$root
+  } else {
+    ztilde <- atanh(corrhat_naive)
+  }
+
 
   ## Get genotype likelihoods ------------------------
   refvec1       <- uout1$input$refvec
