@@ -70,7 +70,17 @@ correst <- function(X,
     lh <- log(h)
   }
 
-  ## Initialize correlation via grid search
+  ## Check for monomorphic snps --------------------------------------------
+  if ((abs(max(exp(lg)) - 1) < TOL) | (abs(max(exp(lh)) - 1) < TOL)) {
+    return(list(zhat_gc   = NA,
+                sezhat_gc = NA,
+                corest    = NA,
+                zhat      = NA,
+                sezhat    = NA,
+                comment   = "One SNP is monomorphic."))
+  }
+
+  ## Initialize correlation via grid search --------------------------------
   nrho <- 5
   atanh_rhovec <- atanh(seq(-0.99, 0.99, length = nrho))
   lvec         <- rep(NA, length = length(atanh_rhovec))
@@ -80,7 +90,7 @@ correst <- function(X,
   atanh_rho_init <- atanh_rhovec[which.max(lvec)]
 
   if (method == "mleCpp") {
-    ## Use new corr_optim function to get maximizer of corrlike ---
+    ## Use new corr_optim function to get maximizer of corrlike ---------
     oout <- corr_optim(atanh_rho = atanh_rho_init,
                        lX        = lX,
                        lY        = lY,
@@ -251,7 +261,6 @@ correst_ind_updog <- function(uout1, uout2) {
 #'
 #' @author David Gerard
 z_to_corr <- function(z, g_cdf, h_cdf) {
-  ## Get Z init
   jd <- exp(dist_from_marg(g_cdf = g_cdf,
                            h_cdf = h_cdf,
                            rho = tanh(z)))
@@ -287,6 +296,17 @@ z_to_z <- function(z, g_cdf, h_cdf) {
 correst_onestep_updog <- function(uout1, uout2) {
   assertthat::assert_that(updog::is.flexdog(uout1))
   assertthat::assert_that(updog::is.flexdog(uout2))
+
+  ## Check to make sure neither is degenerate --------
+  TOL <- 10 ^ -6
+  if ((abs(max(uout1$gene_dist) - 1) < TOL) | (abs(max(uout2$gene_dist) - 1) < TOL)) {
+    return(list(zhat_gc   = NA,
+                sezhat_gc = NA,
+                corest    = NA,
+                zhat      = NA,
+                sezhat    = NA,
+                comment   = "One SNP is monomorphic."))
+  }
 
   ## Initial naive corrlation estimate --------------
   corrhat_naive <- correst_ind_updog(uout1 = uout1, uout2 = uout2)

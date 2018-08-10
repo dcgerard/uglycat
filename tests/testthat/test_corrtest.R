@@ -110,6 +110,11 @@ test_that("correst works on real data 3", {
   cout <- correst_updog(uout1 = udat$uout1, uout2 = udat$uout2)
 })
 
+test_that("correst_onestep_updog works on real data 1", {
+  udat <- readRDS("onesteperr.RDS")
+  cout <- correst_onestep_updog(uout1 = udat$uout1, uout2 = udat$uout2)
+})
+
 test_that("bvnl works", {
   if (requireNamespace("mvtnorm", quietly = TRUE)) {
 
